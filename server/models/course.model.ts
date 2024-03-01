@@ -70,7 +70,6 @@ const courseDataSchema = new Schema<CourseData>({
     title: String,
     description: String,
     videoUrl: String,
-    videoThumbnail: Object,
     videoSection: String,
     videoLength: Number,
     videoPlayer: String,
@@ -99,11 +98,9 @@ const courseSchema = new Schema<Course>({
     },
     thumbnail:{
         public_id:{
-            required:true,
             type:String,
         },
         url:{
-            required:true,
             type:String,
         },
     
@@ -134,7 +131,7 @@ const courseSchema = new Schema<Course>({
     purchased:{
         type: Number,
         default:0,
-    }
+    },
 });
 
 const CourseModel: Model<Course> = mongoose.model("Course", courseSchema);
