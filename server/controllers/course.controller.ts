@@ -3,8 +3,6 @@ import { CatchAsyncError } from "../middleware/catchAsyncErrors";
 import ErrorHandler from "../utils/ErrorHandler";
 import cloudinary from "cloudinary";
 import { createCourse } from "../services/course.service";
-import CourseModel from "../models/course.model";
-import mongoose from "mongoose";
 
 
 // new line
@@ -40,140 +38,37 @@ export const uploadCourse = CatchAsyncError(async(req:Request, res:Response, nex
 
 
 // edit courses
-
-
-// get single course (free)
-
-export const getSingleCourse = CatchAsyncError(async(req: Request, res:Response, next: NextFunction) => {
-    try {
-        const course = await CourseModel.findById(req.params.id).select("-courseData.videoUrl -courseData.suggestion -courseData.questions -courseData.links" );
-
-
-        res.status(200).json({
-            success:true,
-            course
-        });
-
-    } catch (error:any) {
-        return next(new ErrorHandler(error.message, 500));
-    }
-});
-
-
-// get courses all (free)
-
-export const getAllCourses = CatchAsyncError(async(req: Request, res:Response, next: NextFunction) => {
-    try {
-        const courses = await CourseModel.find().select("-courseData.videoUrl -courseData.suggestion -courseData.questions -courseData.links" );
-
-
-        res.status(200).json({
-            success:true,
-            courses
-        });
-
-    } catch (error:any) {
-        return next(new ErrorHandler(error.message, 500));
-    }
-});
-
-
-// get course content (valid user)
-
-export const getCourseByUser = CatchAsyncError(async(req: AuthenticatedRequest, res:Response, next: NextFunction) => {
-    try {
-        const userCourseList = req.user?.courses;
-        
-        const courseId = req.params.id;
-
-        const courseExists = userCourseList?.find((course:any) => course._id.toString() === courseId);
-
-        if (!courseExists){
-            return next(new ErrorHandler("You are not eligible to access this course", 404));
-
+export const editCourse= CatchAsyncError(async(req: Request, res:Response,next: NextFunction)=>{
+    try{
+        const data= req.body;
+        const thumbnail=data.thumbnail;
+        if (thumbnail){
+            await cloudinary.v2.uploader.destroy(thumbnail.public_id)
+            const myCloud= await cloudinary.v2.uploader.upload(thumbnail, {
+                folder:"courses"
+            });
+            data.thumbnail={
+                public_id:myCloud.public_id,
+                url: myCloud.secure_url,
+            };
         }
+        const courseId= req.params.id;
 
-        const course = await CourseModel.findById(courseId);
+        const course= await CourseModel.findByIdAndUpdate(courseId,{
+            $set:data},
+            {new: true}
+        );
 
-        const content = course?.courseData;
-
-
-        res.status(200).json({
-            success:true,
-            content
+        res.status(201).json({
+            success: true,
+            course,
         });
 
-    } catch (error:any) {
-        return next(new ErrorHandler(error.message, 500));
+    }   catch(error:any){
+        return next(new ErrorHandler(error.message,500));
     }
-});
-
-
-// add questions in course content
-
-interface AddQuestionData{
-    question: string;
-    courseId: string;
-    contentId: string;
-}
-
-export const addQuestion = CatchAsyncError(async(req:AuthenticatedRequest, res:Response, next: NextFunction) => {
-    try {
-
-        const {question, courseId, contentId} : AddQuestionData = req.body;
-        const course = await CourseModel.findById(courseId);
-
-
-        if (!mongoose.Types.ObjectId.isValid(contentId)){
-            return next(new ErrorHandler("Invalid content id", 400));
-
-        }
-
-        const courseContent = course?.courseData?.find((item:any) => item._id.equals(contentId));
-
-        if (!courseContent){
-            return next(new ErrorHandler("Invalid content id", 400));
-
-        }
-
-        // create a new question
-
-        const newQuestion:any = {
-            user:req.user,
-            question,
-            questionReplies:[],
-        };
-
-
-        // add question in content
-
-        courseContent.questions.push(newQuestion);
-
-        // save course with updated questions
-
-        await course?.save();
-
-
-        res.status(200).json({
-            success:true,
-            course
-        });
-
-    } catch (error:any) {
-        return next(new ErrorHandler(error.message, 500));
     }
-});
+);
 
 
-
-
-// add reply to questions
-
-interface addReplyData {
-    answer: string;
-    courseId: string;
-    contentId: string;
-    questionId: string;
-}
-
-
+// 
