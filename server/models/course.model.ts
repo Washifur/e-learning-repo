@@ -1,4 +1,5 @@
 import mongoose, {Document,Model,Schema} from "mongoose";
+import { IUser } from "./user.model";
 interface Review extends Document{
     user: object;
     rating: number;
@@ -6,9 +7,9 @@ interface Review extends Document{
     commentReplies: Comment[];
 }
 interface Comment extends Document{
-    user: object;
-    comment: String;
-    commentReplies: Comment[];
+    user: IUser;
+    question: String;
+    questionReplies: Comment[];
 }
 interface Link extends Document{
     title: string;
@@ -62,8 +63,8 @@ const linkSchema = new Schema<Link>({
 });
 const commentSchema = new Schema<Comment>({
     user: Object,
-    comment: String,
-    commentReplies: [Object],
+    question: String,
+    questionReplies: [Object],
 
 });
 const courseDataSchema = new Schema<CourseData>({
