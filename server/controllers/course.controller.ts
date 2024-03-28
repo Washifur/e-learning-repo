@@ -251,6 +251,11 @@ export const addAnswer = CatchAsyncError(async(req:AuthenticatedRequest, res:Res
         }
 
         // add answer to course content
+         // extraa
+         if (!question.questionReplies) {
+            question.questionReplies = [];
+        }
+        // extraa
 
         // extraa
         if (!question.questionReplies) {
