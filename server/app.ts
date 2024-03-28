@@ -25,7 +25,11 @@ app.use(cookieParser());
 // cors
 
 app.use(cors({
+    // origin: process.env.ORIGIN,
     origin: process.env.ORIGIN,
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+
 }));
 
 // routes
@@ -52,4 +56,5 @@ app.all("*", (req:Request, res:Response, next:NextFunction) => {
     next(err);
 });
 
-app.use(ErrorMiddleware);
+// app.use(ErrorMiddleware);
+export default app;

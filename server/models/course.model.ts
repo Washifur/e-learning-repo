@@ -1,7 +1,7 @@
 import mongoose, {Document,Model,Schema} from "mongoose";
 import { IUser } from "./user.model";
 interface Review extends Document{
-    user: object;
+    user: IUser;
     rating: number;
     comment: String;
     commentReplies: Comment[];
@@ -9,7 +9,7 @@ interface Review extends Document{
 interface Comment extends Document{
     user: IUser;
     question: String;
-    questionReplies: Comment[];
+    questionReplies?: Comment[];
 }
 interface Link extends Document{
     title: string;
@@ -55,6 +55,7 @@ const reviewSchema= new Schema<Review>({
 
     },
     comment: String,
+    commentReplies: [Object],
 
 });
 const linkSchema = new Schema<Link>({
