@@ -260,6 +260,12 @@ export const addAnswer = CatchAsyncError(
       }
       // extraa
 
+        // extraa
+        if (!question.questionReplies) {
+            question.questionReplies = [];
+        }
+        // extraa
+
       question.questionReplies.push(newAnswer);
 
       await course?.save();
