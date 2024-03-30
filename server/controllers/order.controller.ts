@@ -20,17 +20,17 @@ interface AuthenticatedRequest extends Request {
 export const createOrder = CatchAsyncError(async (req:AuthenticatedRequest,res:Response,next:NextFunction)=>{
     try{
         const {courseId, payment_info} = req.body as IOrder;
-console.log('1======================')
+
         const user = await userModel.findById(req.user?._id);
 
         const courseExistInUser= user?.courses.some((course:any)=> course._id.toString() === courseId);
-console.log('2=========================')
+
         if (courseExistInUser){
             return next(new ErrorHandler("You parchased this course!!",400))
         }
 
         const course = await CourseModel.findById(courseId);
-console.log('3====================')
+
         if (!course){
             return next(new ErrorHandler("Course not found", 404));
 
@@ -40,7 +40,6 @@ console.log('3====================')
             courseId: course._id,
             userId: user?._id,
         };
-        console.log('4=======================')
         const mailData = {
             order:{
                 _id: course._id.toString().slice(0,6),
@@ -49,17 +48,14 @@ console.log('3====================')
                 date: new Date().toLocaleDateString('en-US', {year:'numeric', month: 'long', day: 'numeric'}),
             }
         }
-        console.log('4.5================================')
         // try{
         //     const html = await ejs.renderFile(path.join(__dirname,'../mails/order-confirmation.ejs'), mailData);
         // }catch(error:any){
         //     console.log("........",error)
         // }
         
-console.log('5================================')
         try{
             if(user){
-                console.log('6=============================')
                 await sendMail({
                     email: user.email,
                     subject: "Order Confirmation",
@@ -67,11 +63,9 @@ console.log('5================================')
                     data: mailData,
                 });
             }
-            console.log('7=============================')
             
         }
         catch(error:any){
-            console.log('8=============================', error)
             return next(new ErrorHandler(error.message,500));
         }
 
