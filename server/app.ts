@@ -11,6 +11,10 @@ import userRouter from './routes/user.route';
 
 import courseRouter from './routes/course.route';
 
+import orderRouter from './routes/order.route';
+import notificationRouter from './routes/notification.route';
+
+
 
 
 //body parser
@@ -35,9 +39,9 @@ app.use(cors({
 
 // routes
 
-app.use("/api/v1", userRouter);
+app.use("/api/v1", userRouter, orderRouter,courseRouter,notificationRouter);
 
-app.use("/api/v1", courseRouter);
+// app.use("/api/v1", courseRouter);
 
 
 // testing api
@@ -57,5 +61,5 @@ app.all("*", (req:Request, res:Response, next:NextFunction) => {
     next(err);
 });
 
-// app.use(ErrorMiddleware);
-export default app;
+app.use(ErrorMiddleware);
+// export default app;
