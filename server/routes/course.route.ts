@@ -25,6 +25,6 @@ courseRouter.put("/add-reply", isAuthenticated,authorizeRoles("admin"), addReply
 
 courseRouter.put("/get-courses", isAuthenticated,authorizeRoles("admin"), getAllCourses);
 
-courseRouter.put("/delete-course/:id", isAuthenticated,authorizeRoles("admin"), deleteCourse);
+courseRouter.delete("/delete-course/:id", isAuthenticated,authorizeRoles("admin"), deleteCourse);
 
 export default courseRouter;
