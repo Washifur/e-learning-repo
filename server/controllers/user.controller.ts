@@ -21,6 +21,7 @@ import {
 } from "../services/user.service";
 import cloudinary from "cloudinary";
 import { error } from "console";
+import CourseModel from "../models/course.model";
 
 // register user
 
@@ -482,4 +483,27 @@ export const deleteUser = CatchAsyncError(async(req:Request,res:Response,next: N
     return next(new ErrorHandler(error.messasge,400));
   }
 });
+  
+// delete ccourse only for admin
+export const deleteCourse = CatchAsyncError(async(req:Request,res:Response,next: NextFunction)=>{
+  try{
+    const {id}= req.params;
+
+    const course = await CourseModel.findById(id);
+    if(!course){
+      return next(new ErrorHandler("User Not Found", 404));
+    }
+     await course.deleteOne({id});
+     await redis.del(id);
+     res.status(200).json({
+      success: true,
+      message: "Course deleted succesfully"
+     })
+
+  } catch(error:any){
+    return next(new ErrorHandler(error.messasge,400));
+  }
+});
+
+
   

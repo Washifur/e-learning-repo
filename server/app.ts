@@ -60,5 +60,5 @@ app.all("*", (req:Request, res:Response, next:NextFunction) => {
     next(err);
 });
 
-// app.use(ErrorMiddleware);
-export default app;
+app.use(ErrorMiddleware);
+// export default app;
