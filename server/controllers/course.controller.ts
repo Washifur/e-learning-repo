@@ -257,12 +257,6 @@ export const addAnswer = CatchAsyncError(async(req:AuthenticatedRequest, res:Res
         }
         // extraa
 
-        // extraa
-        if (!question.questionReplies) {
-            question.questionReplies = [];
-        }
-        // extraa
-
         question.questionReplies.push(newAnswer);
 
 
@@ -417,4 +411,6 @@ export const addReplyToReview = CatchAsyncError(async(req:AuthenticatedRequest, 
     catch (error: any){
         return next(new ErrorHandler(error.message,500));
     }
-})
+});
+
+

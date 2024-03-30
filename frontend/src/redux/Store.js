@@ -22,4 +22,4 @@ export default store;
 
 
 
-export const server= "http://localhost:3000/api/v1";
+export const server= "http://localhost:3000/api/v1/";
