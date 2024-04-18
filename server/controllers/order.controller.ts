@@ -39,13 +39,21 @@ export const createOrder = CatchAsyncError(async (req:AuthenticatedRequest,res:R
         const data:any ={
             courseId: course._id,
             userId: user?._id,
+            payment_info,
         };
+
+        newOrder(data,res,next);
+
         const mailData = {
             order:{
                 _id: course._id.toString().slice(0,6),
                 name: course.name,
                 price: course.price,
                 date: new Date().toLocaleDateString('en-US', {year:'numeric', month: 'long', day: 'numeric'}),
+            },
+            course: {
+                _id: course._id, // Assuming you want to pass the entire course object
+                // Add other properties of course here if needed
             }
         }
         // try{
@@ -81,7 +89,7 @@ export const createOrder = CatchAsyncError(async (req:AuthenticatedRequest,res:R
 
         await course.save();
 
-        newOrder(data,res,next);
+        // newOrder(data,res,next);
 
     } catch(error:any){
         return next(new ErrorHandler(error.messege,500));
@@ -97,3 +105,5 @@ export const getAllOrders = CatchAsyncError(async (req:Request,res:Response,next
     }
     
 });
+
+

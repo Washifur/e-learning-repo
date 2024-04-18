@@ -504,6 +504,6 @@ export const deleteCourse = CatchAsyncError(async(req:Request,res:Response,next:
     return next(new ErrorHandler(error.messasge,400));
   }
 });
-
+// course outline
 
   
