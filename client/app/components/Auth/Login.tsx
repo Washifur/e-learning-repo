@@ -19,11 +19,13 @@ const schema = Yup.object().shape({
 const Login:FC<Props> = ({setRoute}) => {
     const [show, setShow] = useState(false);
 
+    
+
     const formik = useFormik({
         initialValues: {email:"",password:""},
         validationSchema: schema,
         onSubmit: async({email, password}) => {
-            console.log(email,password);
+            // console.log(email,password);
 
         },
     });

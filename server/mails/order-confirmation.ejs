@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+
+<hmtl>
+    <head>
+
+        <title>Order Confirmation</title>
+
+
+
+    </head>
+
+    <body>
+        <div>
+            <h1>Your order from Rookie Academy is confirmed</h1>
+
+        </div>
+        <br>
+
+        <div>
+            <h4>Here's what you ordered: </h4>
+
+            <table>
+                <tr>
+                    <td>
+                        Order #: <%=order._id %>
+                    </td>
+                    <td>
+                        Order Date: <%=order.date %>
+                    </td>
+                </tr>
+            </table>
+
+            <table>
+                <tr>
+                    <td>Item</td>
+                    <td>Qty</td>
+                    <td>Cost</td>
+                </tr>
+            </table>
+
+            <table>
+                <tr>
+                    <td><%=order.name %></td>
+                    <td>1</td>
+                    <td>$<%=order.price %></td>
+                </tr>
+            </table>
+
+            <table>
+                <tr>
+                    <td>Subtotal:</td>
+                    <td>$<%= order.price %></td>
+                </tr>
+            </table>
+
+            <table>
+                <tr>
+                    <td>Total:</td>
+                    <td>$<%= order.price %></td>
+                </tr>
+            </table>
+
+
+        </div>
+
+
+        <div>
+
+            <p>
+                For any question, contact us at
+                <a href="washifur.shihan@gmail.com">supportRookieAcademy</a>
+            </p>
+        </div>
+    </body>
+</hmtl>
