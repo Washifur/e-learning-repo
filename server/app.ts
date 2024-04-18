@@ -13,7 +13,7 @@ import courseRouter from './routes/course.route';
 
 import orderRouter from './routes/order.route';
 import notificationRouter from './routes/notification.route';
-
+import analyticsRouter from './routes/analytics.route';
 
 
 
@@ -33,13 +33,13 @@ app.use(cors({
     // origin: process.env.ORIGIN,
     origin: ["http://localhost:3000"],
     credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    // methods: ["GET", "POST", "PUT", "DELETE"],
 
 }));
 
 // routes
 
-app.use("/api/v1", userRouter, orderRouter,courseRouter,notificationRouter);
+app.use("/api/v1", userRouter, orderRouter,courseRouter,notificationRouter,analyticsRouter);
 
 // app.use("/api/v1", courseRouter);
 

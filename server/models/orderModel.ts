@@ -6,7 +6,7 @@ export interface IOrder extends Document {
     payment_info: object;
 }
 
-const orderSchema = new Schema({
+const orderSchema = new Schema<IOrder>({
     courseId: {
         type: String,
         required: true

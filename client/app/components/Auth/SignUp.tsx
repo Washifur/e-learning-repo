@@ -6,6 +6,7 @@ import {AiOutlineEye, AiOutlineEyeInvisible, AiFillGithub} from "react-icons/ai"
 import { FcGoogle } from 'react-icons/fc';
 import { styles } from '../../../app/styles/style';
 import toast from 'react-hot-toast';
+import { useRegisterMutation } from '@/redux/features/auth/authApi';
 // import { useRegisterMutation } from '../../../redux/features/auth/authApi';
 
 
@@ -23,6 +24,7 @@ const schema = Yup.object().shape({
 
 const Signup:FC<Props> = ({setRoute}) => {
     const [show, setShow] = useState(false);
+
     const [register, {data,error,isSuccess}] = useRegisterMutation();
 
     useEffect(() => {
@@ -38,12 +40,12 @@ const Signup:FC<Props> = ({setRoute}) => {
                 toast.error(errorData.data.message);
             }
         }
-    }, [isSuccess,error]);
+    }, [isSuccess, error, data?.message, setRoute]);
 
     const formik = useFormik({
         initialValues: {name:"", email:"",password:""},
         validationSchema: schema,
-        onSubmit: async({email, password}) => {
+        onSubmit: async({name, email, password}) => {
             // setRoute("Verification")
             const data = {
                 name, email, password
@@ -164,7 +166,7 @@ const Signup:FC<Props> = ({setRoute}) => {
                     Already have an account?{" "}
                     <span
                     className='text-[2190ff] pl-1 cursor-pointer'
-                    onClick={() => setRoute("Sign-Up")}
+                    onClick={() => setRoute("Login")}
                     >
                         Sign in
                     </span>
