@@ -54,7 +54,7 @@ export default function OrdersAnalytics({ isDashboard }: Props) {
   const analyticsData: any = [];
 
   data &&
-    data.orders.last12Months.forEach((item: any) => {
+    data.orders.last12MonthsData.forEach((item: any) => {
       analyticsData.push({ name: item.name, Count: item.count });
     });
 

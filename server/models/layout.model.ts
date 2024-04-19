@@ -52,3 +52,5 @@ const layoutSchema = new Schema<Layout>({
 
 const LayoutModel = model<Layout>("Layout", layoutSchema);
 export default LayoutModel;
+
+
