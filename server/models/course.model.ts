@@ -33,10 +33,11 @@ interface CourseData extends Document{
 interface Course extends Document{
     name: string;
     description: string;
+    categories: string;
     price: number;
-    estimatePrice: number;
+    estimatePrice?: number;
     thumbnail: object;
-    tags: object;
+    tags: string;
     level: string;
     demoUrl: string;
     benefits: {title:string}[];
@@ -70,6 +71,7 @@ const commentSchema = new Schema<Comment>({
 });
 const courseDataSchema = new Schema<CourseData>({
     title: String,
+    videoThumbnail: Object,
     description: String,
     videoUrl: String,
     videoSection: String,
@@ -90,6 +92,12 @@ const courseSchema = new Schema<Course>({
         required:true,
 
     },
+
+    categories:{
+        type:String,
+        required: true,
+    },
+
     price:{
         type:Number,
         required:true,

@@ -10,6 +10,7 @@ import path, { join } from "path";
 import sendMail from "../utils/sendMail";
 import { error } from "console";
 import NotificationModel from "../models/notificationModel";
+import axios from "axios";
 
 // new line
 interface AuthenticatedRequest extends Request {
@@ -48,8 +49,13 @@ export const editCourse = CatchAsyncError(
     try {
       const data = req.body;
       const thumbnail = data.thumbnail;
-      if (thumbnail) {
+      const courseId = req.params.id;
+
+      const courseData = await CourseModel.findById(courseId) as any;
+
+      if (thumbnail && !thumbnail.startsWith("https")) {
         await cloudinary.v2.uploader.destroy(thumbnail.public_id);
+
         const myCloud = await cloudinary.v2.uploader.upload(thumbnail, {
           folder: "courses",
         });
@@ -58,7 +64,14 @@ export const editCourse = CatchAsyncError(
           url: myCloud.secure_url,
         };
       }
-      const courseId = req.params.id;
+      // const courseId = req.params.id;
+
+      if (thumbnail.startsWith("https")) {
+        data.thumbnail = {
+          public_id: courseData?.thumbnail.public_id,
+          url: courseData?.thumbnail.url,
+        };
+      }
 
       const course = await CourseModel.findByIdAndUpdate(
         courseId,
@@ -410,7 +423,7 @@ export const addReplyToReview = CatchAsyncError(
 );
 
 // get all courses --> admin only
-export const getAllUsers = CatchAsyncError(
+export const getAdminCourses = CatchAsyncError(
     async (req: Request, res: Response, next: NextFunction) => {
       try {
         getAllCoursesService(res);
@@ -419,4 +432,29 @@ export const getAllUsers = CatchAsyncError(
       }
     }
   );
+
+  // generate video url 
+
+  export const generateVideoUrl = CatchAsyncError(async (req:Request,res: Response, next:NextFunction) => {
+    try{
+        const {videoId}= req.body;
+        const Response = await axios.post(
+        `https://dev.vdocipher.com/api/videos/${videoId}/otp`,
+        {ttl: 300},
+        {
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: `Apisecret ${process.env.VDOCIPHER_API_SECRET}`,
+            },
+            }
+        
+
+        );
+
+        res.json(Response.data);
+    }    catch(error:any){
+        return next(new ErrorHandler(error.message, 400));
+    }
+})
 
