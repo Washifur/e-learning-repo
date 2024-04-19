@@ -6,7 +6,7 @@ import { createCourse, getAllCoursesService } from "../services/course.service";
 import CourseModel from "../models/course.model";
 import mongoose from "mongoose";
 import ejs from "ejs";
-import path from "path";
+import path, { join } from "path";
 import sendMail from "../utils/sendMail";
 import { error } from "console";
 import NotificationModel from "../models/notificationModel";
@@ -419,3 +419,4 @@ export const getAllUsers = CatchAsyncError(
       }
     }
   );
+
